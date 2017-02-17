@@ -122,7 +122,11 @@ namespace Xunit
 
 		private IEnumerable<string> ParseExcludedClusters(string clusterFilter)
 		{
+#if DOTNETCORE
+			var clusters = typeof(ClusterBase).Assembly()
+#else
 			var clusters = typeof(ClusterBase).Assembly
+#endif
 				.GetTypes()
 				.Where(t => typeof(ClusterBase).IsAssignableFrom(t) && t != typeof(ClusterBase))
 				.Select(c => c.Name.Replace("Cluster", "").ToLowerInvariant());
